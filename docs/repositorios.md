@@ -23,10 +23,3 @@ Os serviços abaixo compõem o mesmo projeto distribuído. Não são minha contr
 | Gateway Service | API gateway com filtro de autorização |
 | Order Service | Pedidos, consome account e product |
 | Exchange Service | Cotações de moeda |
-
-## Referência seguida
-
-Estrutura, padrões e bottlenecks baseados no repositório aprovado pelo professor no grupo Alex/Carlos/Lucas:
-
-- **Plataforma (raiz)**: [Microservice-Alex-Carlos-Lucas/microservices](https://github.com/Microservice-Alex-Carlos-Lucas/microservices)
-- **Product Service (referência)**: [Microservice-Alex-Carlos-Lucas/product-service](https://github.com/Microservice-Alex-Carlos-Lucas/product-service)
