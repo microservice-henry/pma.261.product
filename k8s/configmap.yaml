@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: product-configmap
+data:
+  DATABASE_HOST: postgres
+  DATABASE_PORT: "5432"
+  DATABASE_DB: storedb
+  REDIS_HOST: redis
+  REDIS_PORT: "6379"
