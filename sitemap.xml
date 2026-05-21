@@ -5,15 +5,19 @@
          <lastmod>2026-05-21</lastmod>
     </url>
     <url>
+         <loc>https://microservice-henry.github.io/pma.261.product/api/</loc>
+         <lastmod>2026-05-21</lastmod>
+    </url>
+    <url>
+         <loc>https://microservice-henry.github.io/pma.261.product/architecture/</loc>
+         <lastmod>2026-05-21</lastmod>
+    </url>
+    <url>
          <loc>https://microservice-henry.github.io/pma.261.product/bottlenecks/</loc>
          <lastmod>2026-05-21</lastmod>
     </url>
     <url>
-         <loc>https://microservice-henry.github.io/pma.261.product/endpoints/</loc>
-         <lastmod>2026-05-21</lastmod>
-    </url>
-    <url>
-         <loc>https://microservice-henry.github.io/pma.261.product/repositorios/</loc>
+         <loc>https://microservice-henry.github.io/pma.261.product/development/</loc>
          <lastmod>2026-05-21</lastmod>
     </url>
 </urlset>

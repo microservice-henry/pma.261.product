@@ -1,0 +1,1043 @@
+
+<!doctype html>
+<html lang="pt" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="API REST de catálogo de produtos com cache Redis e métricas Prometheus, documentação individual do microsserviço Product — Insper 2026.1.">
+      
+      
+        <meta name="author" content="Nathan David Pecher Benaion">
+      
+      
+        <link rel="canonical" href="https://microservice-henry.github.io/pma.261.product/architecture/">
+      
+      
+        <link rel="prev" href="../api/">
+      
+      
+        <link rel="next" href="../bottlenecks/">
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.50">
+    
+    
+      
+        <title>Architecture - Product Service - Nathan</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.a40c8224.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="grey" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#architecture" class="md-skip">
+          Pular para conteúdo
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Cabeçalho">
+    <a href=".." title="Product Service - Nathan" class="md-header__button md-logo" aria-label="Product Service - Nathan" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Product Service - Nathan
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Architecture
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="grey" data-md-color-accent="indigo"  aria-label="Modo escuro"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Modo escuro" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="grey" data-md-color-accent="indigo"  aria-label="Modo claro"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Modo claro" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Buscar" placeholder="Buscar" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Pesquisar">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Limpar" aria-label="Limpar" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Inicializando busca
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/microservice-henry/pma.261.product" title="Ir para repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    microservice-henry/pma.261.product
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Abas" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../api/" class="md-tabs__link">
+        
+  
+    
+  
+  API Reference
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+    
+  
+  Architecture
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../bottlenecks/" class="md-tabs__link">
+        
+  
+    
+  
+  Bottlenecks
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../development/" class="md-tabs__link">
+        
+  
+    
+  
+  Development
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navegação" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Product Service - Nathan" class="md-nav__button md-logo" aria-label="Product Service - Nathan" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Product Service - Nathan
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/microservice-henry/pma.261.product" title="Ir para repositório" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    microservice-henry/pma.261.product
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    API Reference
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Architecture
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#visao-da-plataforma" class="md-nav__link">
+    <span class="md-ellipsis">
+      Visão da plataforma
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fluxo-de-requisicao" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fluxo de requisição
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#estrutura-de-pacotes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Estrutura de pacotes
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modelo-de-dados" class="md-nav__link">
+    <span class="md-ellipsis">
+      Modelo de dados
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decisoes-de-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      Decisões de design
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tratamento-de-erros" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tratamento de erros
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#empacotamento-e-deploy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Empacotamento e deploy
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Empacotamento e deploy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#imagem-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      Imagem Docker
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kubernetes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Kubernetes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#local-docker-compose" class="md-nav__link">
+    <span class="md-ellipsis">
+      Local (Docker Compose)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../bottlenecks/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Bottlenecks
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../development/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Development
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Índice">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Índice
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#visao-da-plataforma" class="md-nav__link">
+    <span class="md-ellipsis">
+      Visão da plataforma
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fluxo-de-requisicao" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fluxo de requisição
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#estrutura-de-pacotes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Estrutura de pacotes
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modelo-de-dados" class="md-nav__link">
+    <span class="md-ellipsis">
+      Modelo de dados
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#decisoes-de-design" class="md-nav__link">
+    <span class="md-ellipsis">
+      Decisões de design
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tratamento-de-erros" class="md-nav__link">
+    <span class="md-ellipsis">
+      Tratamento de erros
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#empacotamento-e-deploy" class="md-nav__link">
+    <span class="md-ellipsis">
+      Empacotamento e deploy
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Empacotamento e deploy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#imagem-docker" class="md-nav__link">
+    <span class="md-ellipsis">
+      Imagem Docker
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kubernetes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Kubernetes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#local-docker-compose" class="md-nav__link">
+    <span class="md-ellipsis">
+      Local (Docker Compose)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h1>
+<h2 id="visao-da-plataforma">Visão da plataforma<a class="headerlink" href="#visao-da-plataforma" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>flowchart LR
+    C([Cliente])
+    subgraph Trusted [Trusted Layer]
+        G[Gateway&lt;br/&gt;Spring Cloud Gateway]
+        A[Auth Service&lt;br/&gt;JWT HS256]
+        AC[Account Service]
+        P[Product Service&lt;br/&gt;Spring Boot 4]
+        O[Order Service]
+        X[Exchange API]
+        DB[(PostgreSQL&lt;br/&gt;schemas isolados)]
+        R[(Redis&lt;br/&gt;cache de leituras)]
+    end
+
+    C --&gt;|HTTPS + JWT cookie| G
+    G --&gt;|valida| A
+    G --&gt;|/auth/**| A
+    G --&gt;|/accounts/**| AC
+    G --&gt;|/products/**| P
+    G --&gt;|/orders/**| O
+    G --&gt;|/exchanges/**| X
+    O -.-&gt;|Feign| P
+    O -.-&gt;|Feign| AC
+    P --&gt; DB
+    P --&gt; R
+
+    style P fill:#4051b5,color:#fff
+    style R fill:#d32f2f,color:#fff
+    style G fill:#00796b,color:#fff</code></pre>
+<p><strong>Princípios:</strong></p>
+<ul>
+<li><strong>Gateway como única porta externa.</strong> O <code>Product Service</code> nunca recebe tráfego direto da internet.</li>
+<li><strong>JWT validado uma vez.</strong> O Gateway valida o token e injeta o header <code>id-account</code> antes de encaminhar.</li>
+<li><strong>Schemas isolados.</strong> Cada serviço tem seu schema PostgreSQL próprio (<code>products</code>, <code>accounts</code>, <code>orders</code>) — isolamento lógico sem o custo operacional de múltiplas instâncias.</li>
+<li><strong>Redis compartilhado com prefixos.</strong> A key <code>products::products::{uuid}</code> evita colisão se outros serviços usarem o mesmo cluster.</li>
+</ul>
+<hr />
+<h2 id="fluxo-de-requisicao">Fluxo de requisição<a class="headerlink" href="#fluxo-de-requisicao" title="Permanent link">&para;</a></h2>
+<pre class="mermaid"><code>sequenceDiagram
+    autonumber
+    participant C as Cliente
+    participant G as Gateway
+    participant A as Auth Service
+    participant P as Product Service
+    participant SC as Spring Cache (AOP)
+    participant R as Redis
+    participant DB as PostgreSQL
+
+    C-&gt;&gt;G: GET /products/{id} (Bearer JWT)
+    G-&gt;&gt;A: validar token
+    A--&gt;&gt;G: ok, id-account=&lt;uuid&gt;
+    G-&gt;&gt;P: GET /products/{id}&lt;br/&gt;header id-account
+    P-&gt;&gt;SC: ProductService.get(id)
+    Note over SC: @Cacheable("products", key="#id")
+    alt cache hit (Redis tem a key)
+        SC-&gt;&gt;R: GET products::products::{id}
+        R--&gt;&gt;SC: JSON
+        SC--&gt;&gt;P: ProductResponse
+    else cache miss
+        SC-&gt;&gt;DB: findById(id)
+        DB--&gt;&gt;SC: row
+        SC-&gt;&gt;R: SETEX products::products::{id} 60
+        SC--&gt;&gt;P: ProductResponse
+    end
+    P--&gt;&gt;G: 200 OK + ProductResponse
+    G--&gt;&gt;C: 200 OK + ProductResponse</code></pre>
+<p>A camada <code>Spring Cache (AOP)</code> é injetada automaticamente por Spring Boot quando o método é anotado com <code>@Cacheable</code>. Não há código de cache escrito à mão — só configuração e annotations.</p>
+<hr />
+<h2 id="estrutura-de-pacotes">Estrutura de pacotes<a class="headerlink" href="#estrutura-de-pacotes" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>src/main/java/store/product/
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── ProductApplication.java     # @SpringBootApplication — entrypoint
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── ProductController.java      # @RestController @RequestMapping(&quot;/products&quot;)
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│                               # Lê @RequestHeader(&quot;id-account&quot;), valida @RequestBody
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>├── ProductService.java         # @Service com regras de negócio
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>│                               # @Cacheable / @CachePut / @CacheEvict
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>├── ProductRepository.java      # extends JpaRepository&lt;Product, UUID&gt;
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>│                               # + findByNameContainingIgnoreCase
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>├── Product.java                # @Entity @Table(&quot;product&quot;)
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>│                               # id UUID @GeneratedValue
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>├── ProductRequest.java         # record com @NotBlank / @NotNull / @Positive
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>├── ProductResponse.java        # record + static from(Product)
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>└── CacheConfig.java            # @Configuration @EnableCaching
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>                                # bean RedisCacheManager (TTL 60s, prefix products::)
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>
+<a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>src/main/resources/
+<a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>├── application.yaml            # datasource + redis + actuator + cache
+<a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>└── db/migration/
+<a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>    └── V1__create_products_table.sql
+<a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>
+<a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>k8s/                            # Manifests Kubernetes
+<a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>├── configmap.yaml              # DATABASE_HOST/PORT/DB, REDIS_HOST/PORT
+<a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>├── secrets.yaml                # DATABASE_USERNAME/PASSWORD (base64)
+<a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>├── deployment.yaml             # 1 container, requests 256Mi/250m, limits 512Mi/500m
+<a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>├── service.yaml                # ClusterIP porta 8080
+<a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>└── hpa.yaml                    # 1–5 réplicas, target 50% CPU
+</code></pre></div>
+<hr />
+<h2 id="modelo-de-dados">Modelo de dados<a class="headerlink" href="#modelo-de-dados" title="Permanent link">&para;</a></h2>
+<p>Schema <strong><code>products</code></strong> isolado no Postgres. Criação automática via <code>spring.flyway.schemas: products</code>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1">-- V1__create_products_table.sql</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="k">IF</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">EXISTS</span><span class="w"> </span><span class="n">products</span><span class="p">.</span><span class="n">product</span><span class="w"> </span><span class="p">(</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="n">id</span><span class="w">      </span><span class="n">UUID</span><span class="w">         </span><span class="k">PRIMARY</span><span class="w"> </span><span class="k">KEY</span><span class="w"> </span><span class="k">DEFAULT</span><span class="w"> </span><span class="n">gen_random_uuid</span><span class="p">(),</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span><span class="n">name</span><span class="w">    </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">255</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span><span class="n">price</span><span class="w">   </span><span class="nb">NUMERIC</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="n">unit</span><span class="w">    </span><span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="w">  </span><span class="k">NOT</span><span class="w"> </span><span class="k">NULL</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="p">);</span>
+</code></pre></div>
+<table>
+<thead>
+<tr>
+<th>Coluna</th>
+<th>Tipo</th>
+<th>Decisão</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td><code>UUID</code> (PK, default <code>gen_random_uuid()</code>)</td>
+<td>Geração no banco — o JPA recebe o id no INSERT sem precisar de roundtrip extra</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td><code>VARCHAR(255) NOT NULL</code></td>
+<td>Suficiente para nomes de produtos; indexável se for necessário (search por nome usa <code>LIKE %x%</code> sem índice)</td>
+</tr>
+<tr>
+<td><code>price</code></td>
+<td><code>NUMERIC(10, 2) NOT NULL</code></td>
+<td>Até 99.999.999,99 — precisão financeira garantida com <code>BigDecimal</code> no Java</td>
+</tr>
+<tr>
+<td><code>unit</code></td>
+<td><code>VARCHAR(50) NOT NULL</code></td>
+<td>Unidade livre (<code>kg</code>, <code>un</code>, <code>L</code>, <code>slice</code>, etc) sem enum — flexibilidade &gt; validação rígida</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="decisoes-de-design">Decisões de design<a class="headerlink" href="#decisoes-de-design" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Decisão</th>
+<th>Motivo</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Spring Boot 4.0.3 + Java 25</strong></td>
+<td>Stack moderna; <code>ProblemDetails</code> RFC 7807 nativo via <code>spring.mvc.problemdetails.enabled</code></td>
+</tr>
+<tr>
+<td><strong>JWT validado no Gateway, não no serviço</strong></td>
+<td>Reduz latência; serviço confia no header <code>id-account</code> injetado; perímetro de segurança bem-definido</td>
+</tr>
+<tr>
+<td><strong>Redis vs cache local (<code>Caffeine</code>)</strong></td>
+<td>Coerência automática entre réplicas — quando HPA escala de 1 para 5 pods, todos compartilham o mesmo estado de cache</td>
+</tr>
+<tr>
+<td><strong><code>RedisCacheManager</code> custom (não default)</strong></td>
+<td>TTL explícito de 60s; prefixo <code>products::</code> evita colisão; serialização JSON legível no <code>redis-cli</code></td>
+</tr>
+<tr>
+<td><strong><code>BigDecimal</code> mapeado para <code>NUMERIC(10,2)</code></strong></td>
+<td>Sem perda de precisão de <code>double</code> em operações financeiras</td>
+</tr>
+<tr>
+<td><strong><code>@CachePut</code> em <code>create</code> (não só <code>@Cacheable</code> em <code>get</code>)</strong></td>
+<td>Elimina o primeiro cache miss; o produto já entra cacheado</td>
+</tr>
+<tr>
+<td><strong><code>@CacheEvict</code> em <code>delete</code> (não esperar TTL)</strong></td>
+<td>Garante que um <code>GET</code> após <code>DELETE</code> veja 404 imediatamente</td>
+</tr>
+<tr>
+<td><strong><code>list(name)</code> sem cache</strong></td>
+<td>Listas mudam com frequência (catálogo cresce); cache invalida-se rápido demais para compensar</td>
+</tr>
+<tr>
+<td><strong>Records (<code>ProductRequest</code>/<code>ProductResponse</code>)</strong></td>
+<td>Imutáveis, concisos, com <code>equals/hashCode/toString</code> automáticos</td>
+</tr>
+<tr>
+<td><strong><code>JpaRepository</code></strong> (não <code>CrudRepository</code>)</td>
+<td>Métodos extras úteis (<code>findAll(Pageable)</code>, derived queries como <code>findByNameContainingIgnoreCase</code>)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="tratamento-de-erros">Tratamento de erros<a class="headerlink" href="#tratamento-de-erros" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Cenário</th>
+<th>Status</th>
+<th>Response</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>name</code> vazio, <code>price ≤ 0</code>, <code>unit</code> vazia</td>
+<td><code>400 Bad Request</code></td>
+<td>ProblemDetails com <code>detail: "Validation failed"</code></td>
+</tr>
+<tr>
+<td><code>id-account</code> header ausente</td>
+<td><code>400 Bad Request</code></td>
+<td>ProblemDetails — header obrigatório</td>
+</tr>
+<tr>
+<td><code>GET</code>/<code>DELETE</code> em <code>id</code> inexistente</td>
+<td><code>404 Not Found</code></td>
+<td><code>ResponseStatusException(NOT_FOUND, "Product not found")</code></td>
+</tr>
+<tr>
+<td><code>id</code> no path com formato inválido (não-UUID)</td>
+<td><code>400 Bad Request</code></td>
+<td>Spring conversion error</td>
+</tr>
+<tr>
+<td>Redis indisponível</td>
+<td><code>500 Internal Server Error</code></td>
+<td>Fail-fast (não há fallback gracioso configurado)</td>
+</tr>
+<tr>
+<td>Postgres indisponível</td>
+<td><code>500 Internal Server Error</code></td>
+<td>JPA propaga <code>DataAccessException</code></td>
+</tr>
+</tbody>
+</table>
+<p>ProblemDetails é o formato canônico (RFC 7807). Habilitado via:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nt">spring</span><span class="p">:</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span><span class="nt">mvc</span><span class="p">:</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">    </span><span class="nt">problemdetails</span><span class="p">:</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">      </span><span class="nt">enabled</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</code></pre></div>
+<hr />
+<h2 id="empacotamento-e-deploy">Empacotamento e deploy<a class="headerlink" href="#empacotamento-e-deploy" title="Permanent link">&para;</a></h2>
+<h3 id="imagem-docker">Imagem Docker<a class="headerlink" href="#imagem-docker" title="Permanent link">&para;</a></h3>
+<p><code>Dockerfile</code> baseado em <code>eclipse-temurin:25</code> (Java 25 oficial). A imagem é construída em duas etapas:</p>
+<ol>
+<li><code>mvn clean package</code> localmente → produz <code>target/product-service-1.0.0.jar</code></li>
+<li><code>docker build</code> → imagem com o jar.</li>
+</ol>
+<h3 id="kubernetes">Kubernetes<a class="headerlink" href="#kubernetes" title="Permanent link">&para;</a></h3>
+<p>Manifests versionados em <code>k8s/</code>:</p>
+<ul>
+<li><strong><code>deployment.yaml</code></strong> — 1 container, recursos: <code>requests 256Mi/250m</code>, <code>limits 512Mi/500m</code>, env vars vindas do ConfigMap (DB host/port/db, Redis) e Secret (DB user/password).</li>
+<li><strong><code>service.yaml</code></strong> — <code>ClusterIP</code> na porta 8080, expõe apenas internamente.</li>
+<li><strong><code>configmap.yaml</code></strong> — config não-sensível.</li>
+<li><strong><code>secrets.yaml</code></strong> — credenciais em base64. <strong>Trocar antes de aplicar em produção.</strong></li>
+<li><strong><code>hpa.yaml</code></strong> — <code>HorizontalPodAutoscaler</code> 1–5 réplicas com target de 50% CPU.</li>
+</ul>
+<h3 id="local-docker-compose">Local (Docker Compose)<a class="headerlink" href="#local-docker-compose" title="Permanent link">&para;</a></h3>
+<p><code>compose.yaml</code> na raiz sobe Postgres + Redis + product em uma rede só, com healthchecks. Suficiente para desenvolvimento e demonstração — ver <a href="../development/">Development</a>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Voltar para o topo
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.tracking", "content.code.copy", "content.code.annotate", "content.tooltips"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copiado para \u00e1rea de transfer\u00eancia", "clipboard.copy": "Copiar para \u00e1rea de transfer\u00eancia", "search.result.more.one": "mais 1 nesta p\u00e1gina", "search.result.more.other": "# mais nesta p\u00e1gina", "search.result.none": "Nenhum documento encontrado", "search.result.one": "1 documento encontrado", "search.result.other": "# documentos encontrados", "search.result.placeholder": "Digite para iniciar a busca", "search.result.term.missing": "Ausente", "select.version": "Selecione a vers\u00e3o"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.60a45f97.min.js"></script>
+      
+    
+  </body>
+</html>
