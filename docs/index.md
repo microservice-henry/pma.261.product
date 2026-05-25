@@ -6,7 +6,7 @@
 
 **Aluno:** Nathan Benaion<br>
 **Grupo:** Henry Idesis · Nathan Benaion · Kauã Makiyama<br>
-**Disciplina:** Plataformas, Microserviços e APIs — Insper 2026.1<br>
+**Disciplina:** Plataformas, Microsserviços, DevOps e APIs — Insper 2026.1<br>
 **Professor:** Humberto Sandmann
 
 ---
