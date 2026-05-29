@@ -1,7 +1,5 @@
 # Vídeo de apresentação
 
-Demonstração ao vivo do `product-service`: arquitetura, CRUD funcionando, validação RFC 7807 e os dois bottlenecks (cache Redis com speedup mensurável + métricas Prometheus).
-
 <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; margin: 2rem 0;">
   <iframe
     style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 8px;"
@@ -18,48 +16,36 @@ Demonstração ao vivo do `product-service`: arquitetura, CRUD funcionando, vali
 
 ---
 
-## Roteiro
+## O que foi apresentado
 
-| Tempo | Bloco | Conteúdo |
-|---|---|---|
-| **0:00–0:15** | Abertura | Identificação e contexto |
-| **0:15–0:45** | Arquitetura | Visão da plataforma + papel do product-service no Trusted Layer |
-| **0:45–1:30** | Demo CRUD | `POST`, `GET` com filtro `?name=`, validação RFC 7807 |
-| **1:30–2:05** | Bottleneck #1 | Cache Redis ao vivo — speedup de ~7× (22ms → 3ms) |
-| **2:05–2:30** | Bottleneck #2 | Métricas Prometheus + prova de 0 queries no Postgres para 3 GETs |
-| **2:30** | Encerramento | Links para repo, imagem Docker e site |
+### 1. Product API — Endpoints principais
 
----
+Demonstração ao vivo do `POST /products`, `GET /products?name=...` e `GET /products/{id}` passando pelo Gateway com autenticação JWT (header `id-account` injetado). Validação de entrada via Jakarta Validation com resposta no padrão `ProblemDetails` (RFC 7807) quando o body é inválido.
 
-## Comandos executados na demo
+### 2. Bottleneck — Cache Redis (`@Cacheable`)
 
-Reproduza localmente seguindo o guia de [Development](development.md).
+O `ProductService` é cacheado em Redis com TTL de 60 segundos. As três anotações cobrem o ciclo de vida da entrada: `@CachePut` na criação popula o cache imediatamente, `@Cacheable` no `get` serve de Redis quando o `id` já está cacheado, e `@CacheEvict` no `delete` remove a entrada. Demonstrado ao vivo com três `GET /products/{id}` consecutivos.
 
-### Criação e validação
+```java
+@CachePut(value = "products", key = "#result.id()")
+public ProductResponse create(ProductRequest request) { ... }
 
-```bash
-PID=$(curl -s -X POST http://localhost:8080/products \
-  -H 'id-account: 00000000-0000-0000-0000-000000000001' \
-  -H 'Content-Type: application/json' \
-  -d '{"name":"Tomato","price":10.12,"unit":"kg"}' | jq -r .id)
+@Cacheable(value = "products", key = "#id")
+public ProductResponse get(UUID id) { ... }
+
+@CacheEvict(value = "products", key = "#id")
+public void delete(UUID id) { ... }
 ```
 
-### Demonstração do cache (3 GETs no mesmo `id`)
+Resultado mensurado no vídeo: **1ª chamada ~22ms** (miss + Postgres), **2ª/3ª chamadas ~3ms** (hit no Redis) — **~7× de speedup**.
+
+### 3. Bottleneck — Observabilidade
+
+Spring Boot Actuator + Micrometer expondo métricas no formato Prometheus em `/actuator/prometheus`. Sem código custom — apenas configuração. Demonstrado ao vivo:
 
 ```bash
-for i in 1 2 3; do
-  curl -s -o /dev/null \
-    -H 'id-account: 00000000-0000-0000-0000-000000000001' \
-    -w "Call $i: %{time_total}s\n" \
-    http://localhost:8080/products/$PID
-done
-```
-
-### Inspeção do Redis e das métricas
-
-```bash
-docker compose exec redis redis-cli KEYS '*'
-
 curl -s http://localhost:8080/actuator/prometheus \
   | grep -E 'http_server_requests.*products/|spring_data_repository'
 ```
+
+Os contadores provam que **3 GETs HTTP** chegaram em `/products/{id}` mas **`findById` não aparece nas métricas do repository** — o cache absorveu 100% das leituras, e o Postgres recebeu zero queries.
