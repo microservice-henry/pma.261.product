@@ -44,7 +44,7 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public ProductResponse get(
-            @RequestHeader("id-account") String idAccount,
+            @RequestHeader(value = "id-account", required = false) String idAccount,
             @PathVariable UUID id
     ) {
         return service.get(id);
