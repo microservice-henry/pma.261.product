@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
         SERVICE = 'product' // Name of the service being built
-        NAME = "humbertosandmann/${env.SERVICE}" // Docker Hub repository name
+        NAME = "nadapebe/${env.SERVICE}" // Docker Hub repository name
     }
     stages {
         stage('Build') {

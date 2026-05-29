@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: product
-          image: microservice-henry/product:latest
+          image: nadapebe/product:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 8080

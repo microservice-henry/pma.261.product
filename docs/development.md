@@ -135,8 +135,8 @@ O serviço sobe em `http://localhost:8080`.
 
 ```bash
 mvn -B -DskipTests clean package
-docker build -t microservice-henry/product .
-docker run -p 8080:8080 --env-file .env microservice-henry/product
+docker build -t nadapebe/product .
+docker run -p 8080:8080 --env-file .env nadapebe/product
 ```
 
 A imagem usa `eclipse-temurin:25` como base e copia o jar gerado pelo Maven.
@@ -165,14 +165,14 @@ Tudo já vem via `spring-boot-starter-test` no `pom.xml`.
 O `Jenkinsfile` na raiz define duas stages:
 
 1. **Build** — `mvn -B -DskipTests clean package`
-2. **Build & Push Image** — `docker buildx` constrói imagem multi-arquitetura (linux/arm64 + linux/amd64) e dá push pro Docker Hub em `microservice-henry/product:latest` e `:${BUILD_ID}`.
+2. **Build & Push Image** — `docker buildx` constrói imagem multi-arquitetura (linux/arm64 + linux/amd64) e dá push pro Docker Hub em `nadapebe/product:latest` e `:${BUILD_ID}`.
 
 ```groovy
 pipeline {
     agent any
     environment {
         SERVICE = 'product'
-        NAME    = "microservice-henry/${env.SERVICE}"
+        NAME    = "nadapebe/${env.SERVICE}"
     }
     stages {
         stage('Build') { steps { sh 'mvn -B -DskipTests clean package' } }

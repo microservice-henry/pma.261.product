@@ -34,8 +34,8 @@ Sobe Postgres + Redis + product na mesma rede Docker. Flyway aplica as migration
 
 ```bash
 mvn -B -DskipTests clean package
-docker build -t microservice-henry/product .
-docker run -p 8080:8080 --env-file .env microservice-henry/product
+docker build -t nadapebe/product .
+docker run -p 8080:8080 --env-file .env nadapebe/product
 ```
 
 ## Kubernetes
