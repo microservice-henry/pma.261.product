@@ -514,46 +514,37 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#roteiro" class="md-nav__link">
+  <a href="#o-que-foi-apresentado" class="md-nav__link">
     <span class="md-ellipsis">
-      Roteiro
+      O que foi apresentado
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#comandos-executados-na-demo" class="md-nav__link">
-    <span class="md-ellipsis">
-      Comandos executados na demo
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Comandos executados na demo">
+    <nav class="md-nav" aria-label="O que foi apresentado">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#criacao-e-validacao" class="md-nav__link">
+  <a href="#1-product-api-endpoints-principais" class="md-nav__link">
     <span class="md-ellipsis">
-      Criação e validação
+      1. Product API — Endpoints principais
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#demonstracao-do-cache-3-gets-no-mesmo-id" class="md-nav__link">
+  <a href="#2-bottleneck-cache-redis-cacheable" class="md-nav__link">
     <span class="md-ellipsis">
-      Demonstração do cache (3 GETs no mesmo id)
+      2. Bottleneck — Cache Redis (@Cacheable)
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#inspecao-do-redis-e-das-metricas" class="md-nav__link">
+  <a href="#3-bottleneck-observabilidade" class="md-nav__link">
     <span class="md-ellipsis">
-      Inspeção do Redis e das métricas
+      3. Bottleneck — Observabilidade
     </span>
   </a>
   
@@ -599,46 +590,37 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#roteiro" class="md-nav__link">
+  <a href="#o-que-foi-apresentado" class="md-nav__link">
     <span class="md-ellipsis">
-      Roteiro
+      O que foi apresentado
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#comandos-executados-na-demo" class="md-nav__link">
-    <span class="md-ellipsis">
-      Comandos executados na demo
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Comandos executados na demo">
+    <nav class="md-nav" aria-label="O que foi apresentado">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#criacao-e-validacao" class="md-nav__link">
+  <a href="#1-product-api-endpoints-principais" class="md-nav__link">
     <span class="md-ellipsis">
-      Criação e validação
+      1. Product API — Endpoints principais
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#demonstracao-do-cache-3-gets-no-mesmo-id" class="md-nav__link">
+  <a href="#2-bottleneck-cache-redis-cacheable" class="md-nav__link">
     <span class="md-ellipsis">
-      Demonstração do cache (3 GETs no mesmo id)
+      2. Bottleneck — Cache Redis (@Cacheable)
     </span>
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#inspecao-do-redis-e-das-metricas" class="md-nav__link">
+  <a href="#3-bottleneck-observabilidade" class="md-nav__link">
     <span class="md-ellipsis">
-      Inspeção do Redis e das métricas
+      3. Bottleneck — Observabilidade
     </span>
   </a>
   
@@ -668,7 +650,6 @@
 
 
 <h1 id="video-de-apresentacao">Vídeo de apresentação<a class="headerlink" href="#video-de-apresentacao" title="Permanent link">&para;</a></h1>
-<p>Demonstração ao vivo do <code>product-service</code>: arquitetura, CRUD funcionando, validação RFC 7807 e os dois bottlenecks (cache Redis com speedup mensurável + métricas Prometheus).</p>
 <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; margin: 2rem 0;">
   <iframe
     style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 8px;"
@@ -683,71 +664,27 @@
 
 <p>🔗 Link direto: <a href="https://youtu.be/IS5kZkxHp-A" target="_blank">youtu.be/IS5kZkxHp-A</a></p>
 <hr />
-<h2 id="roteiro">Roteiro<a class="headerlink" href="#roteiro" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>Tempo</th>
-<th>Bloco</th>
-<th>Conteúdo</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>0:00–0:15</strong></td>
-<td>Abertura</td>
-<td>Identificação e contexto</td>
-</tr>
-<tr>
-<td><strong>0:15–0:45</strong></td>
-<td>Arquitetura</td>
-<td>Visão da plataforma + papel do product-service no Trusted Layer</td>
-</tr>
-<tr>
-<td><strong>0:45–1:30</strong></td>
-<td>Demo CRUD</td>
-<td><code>POST</code>, <code>GET</code> com filtro <code>?name=</code>, validação RFC 7807</td>
-</tr>
-<tr>
-<td><strong>1:30–2:05</strong></td>
-<td>Bottleneck #1</td>
-<td>Cache Redis ao vivo — speedup de ~7× (22ms → 3ms)</td>
-</tr>
-<tr>
-<td><strong>2:05–2:30</strong></td>
-<td>Bottleneck #2</td>
-<td>Métricas Prometheus + prova de 0 queries no Postgres para 3 GETs</td>
-</tr>
-<tr>
-<td><strong>2:30</strong></td>
-<td>Encerramento</td>
-<td>Links para repo, imagem Docker e site</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h2 id="comandos-executados-na-demo">Comandos executados na demo<a class="headerlink" href="#comandos-executados-na-demo" title="Permanent link">&para;</a></h2>
-<p>Reproduza localmente seguindo o guia de <a href="../development/">Development</a>.</p>
-<h3 id="criacao-e-validacao">Criação e validação<a class="headerlink" href="#criacao-e-validacao" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nv">PID</span><span class="o">=</span><span class="k">$(</span>curl<span class="w"> </span>-s<span class="w"> </span>-X<span class="w"> </span>POST<span class="w"> </span>http://localhost:8080/products<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;id-account: 00000000-0000-0000-0000-000000000001&#39;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="w">  </span>-H<span class="w"> </span><span class="s1">&#39;Content-Type: application/json&#39;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;name&quot;:&quot;Tomato&quot;,&quot;price&quot;:10.12,&quot;unit&quot;:&quot;kg&quot;}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>-r<span class="w"> </span>.id<span class="k">)</span>
+<h2 id="o-que-foi-apresentado">O que foi apresentado<a class="headerlink" href="#o-que-foi-apresentado" title="Permanent link">&para;</a></h2>
+<h3 id="1-product-api-endpoints-principais">1. Product API — Endpoints principais<a class="headerlink" href="#1-product-api-endpoints-principais" title="Permanent link">&para;</a></h3>
+<p>Demonstração ao vivo do <code>POST /products</code>, <code>GET /products?name=...</code> e <code>GET /products/{id}</code> passando pelo Gateway com autenticação JWT (header <code>id-account</code> injetado). Validação de entrada via Jakarta Validation com resposta no padrão <code>ProblemDetails</code> (RFC 7807) quando o body é inválido.</p>
+<h3 id="2-bottleneck-cache-redis-cacheable">2. Bottleneck — Cache Redis (<code>@Cacheable</code>)<a class="headerlink" href="#2-bottleneck-cache-redis-cacheable" title="Permanent link">&para;</a></h3>
+<p>O <code>ProductService</code> é cacheado em Redis com TTL de 60 segundos. As três anotações cobrem o ciclo de vida da entrada: <code>@CachePut</code> na criação popula o cache imediatamente, <code>@Cacheable</code> no <code>get</code> serve de Redis quando o <code>id</code> já está cacheado, e <code>@CacheEvict</code> no <code>delete</code> remove a entrada. Demonstrado ao vivo com três <code>GET /products/{id}</code> consecutivos.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nd">@CachePut</span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;products&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;#result.id()&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kd">public</span><span class="w"> </span><span class="n">ProductResponse</span><span class="w"> </span><span class="nf">create</span><span class="p">(</span><span class="n">ProductRequest</span><span class="w"> </span><span class="n">request</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="nd">@Cacheable</span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;products&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;#id&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="kd">public</span><span class="w"> </span><span class="n">ProductResponse</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="n">UUID</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="nd">@CacheEvict</span><span class="p">(</span><span class="n">value</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;products&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;#id&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">delete</span><span class="p">(</span><span class="n">UUID</span><span class="w"> </span><span class="n">id</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">...</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
-<h3 id="demonstracao-do-cache-3-gets-no-mesmo-id">Demonstração do cache (3 GETs no mesmo <code>id</code>)<a class="headerlink" href="#demonstracao-do-cache-3-gets-no-mesmo-id" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="k">for</span><span class="w"> </span>i<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="m">3</span><span class="p">;</span><span class="w"> </span><span class="k">do</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>curl<span class="w"> </span>-s<span class="w"> </span>-o<span class="w"> </span>/dev/null<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span>-H<span class="w"> </span><span class="s1">&#39;id-account: 00000000-0000-0000-0000-000000000001&#39;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">    </span>-w<span class="w"> </span><span class="s2">&quot;Call </span><span class="nv">$i</span><span class="s2">: %{time_total}s\n&quot;</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">    </span>http://localhost:8080/products/<span class="nv">$PID</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="k">done</span>
+<p>Resultado mensurado no vídeo: <strong>1ª chamada ~22ms</strong> (miss + Postgres), <strong>2ª/3ª chamadas ~3ms</strong> (hit no Redis) — <strong>~7× de speedup</strong>.</p>
+<h3 id="3-bottleneck-observabilidade">3. Bottleneck — Observabilidade<a class="headerlink" href="#3-bottleneck-observabilidade" title="Permanent link">&para;</a></h3>
+<p>Spring Boot Actuator + Micrometer expondo métricas no formato Prometheus em <code>/actuator/prometheus</code>. Sem código custom — apenas configuração. Demonstrado ao vivo:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://localhost:8080/actuator/prometheus<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;http_server_requests.*products/|spring_data_repository&#39;</span>
 </code></pre></div>
-<h3 id="inspecao-do-redis-e-das-metricas">Inspeção do Redis e das métricas<a class="headerlink" href="#inspecao-do-redis-e-das-metricas" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>docker<span class="w"> </span>compose<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>redis<span class="w"> </span>redis-cli<span class="w"> </span>KEYS<span class="w"> </span><span class="s1">&#39;*&#39;</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>curl<span class="w"> </span>-s<span class="w"> </span>http://localhost:8080/actuator/prometheus<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;http_server_requests.*products/|spring_data_repository&#39;</span>
-</code></pre></div>
+<p>Os contadores provam que <strong>3 GETs HTTP</strong> chegaram em <code>/products/{id}</code> mas <strong><code>findById</code> não aparece nas métricas do repository</strong> — o cache absorveu 100% das leituras, e o Postgres recebeu zero queries.</p>
 
 
 
